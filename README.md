@@ -1,1 +1,1 @@
-# Apna_App
+Apna App is a dedicated platform for job seekers, connecting them with potential employers. It offers personalized job recommendations, easy application processes, and real-time updates to help users find their ideal job quickly and efficiently.
