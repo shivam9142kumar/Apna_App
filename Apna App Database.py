@@ -30,7 +30,7 @@ mydb = mysql.connector.connect(host="localhost", user="root", password="*****", 
 
 #Creating Queries for Tables for the database
 #"User" Table Query
-User = "CREATE TABLE User(uid VARCHAR(30) PRIMARY KEY, Name VARCHAR(100) NOT NULL, Email_id VARCHAR(70) NOT NULL UNIQUE, Skills VARCHAR(200) NOT NULL, Phone_no INT(11) NOT NULL UNIQUE, Degree VARCHAR(200))"
+User = "CREATE TABLE User(uid VARCHAR(30) PRIMARY KEY, Name VARCHAR(100) NOT NULL, Email_id VARCHAR(70) NOT NULL UNIQUE, Skills VARCHAR(200) NOT NULL, Phone_no INT(11) NOT NULL UNIQUE, Degree VARCHAR(200), Password VARCHAR(100) NOT NULL)"
 
 #"Company" Table Query
 Company = "CREATE TABLE Company(cid VARCHAR(30) PRIMARY KEY, Name VARCHAR(100) NOT NULL, Email_id VARCHAR(100) NOT NULL UNIQUE)"
