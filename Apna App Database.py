@@ -58,6 +58,6 @@ apna.execute(Feedback)
 #Query to check the Tables if created or not
 apna.execute("SHOW TABLES")
 
-#Pyhton code to execute the above Query
+#Python code to execute the above Query
 for tb in apna:
     print(tb)
