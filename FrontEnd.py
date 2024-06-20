@@ -102,54 +102,62 @@ class SignUpPage(PageBase):
 
     def cancel(self):
         self.master._history.pop()  
-        self.destroy()  
-        LoginPage(self.master).pack()  
+        self.destroy()
+        LoginPage(self.master).pack()
 
 # Profile Page class, inheriting from PageBase
 class ProfilePage(PageBase):
     def __init__(self, master, username):
-        super().__init__(master, bg_color='#f0f0f0')  
-        self.username = username  
+        super().__init__(master, bg_color='#f0f0f0')
+        self.username = username
         self.create_widgets()
 
     def create_widgets(self):
-        tk.Label(self._PageBase__frame, text=f"Welcome, {self.username}!", font=("Helvetica", 16, "bold"), bg='#f0f0f0').pack(pady=10)
-        
-        tk.Label(self._PageBase__frame, text="User Information", font=("Helvetica", 14, "bold"), bg='#f0f0f0').pack(pady=10)
-        tk.Label(self._PageBase__frame, text="Name: Shubh Agrawal", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text="Email: shubh@gmail.com", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text="Location: Bangalore, INDIA", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
+        # Header
+        tk.Label(self._PageBase__frame, text=f"Welcome, {self.username}!", font=("Helvetica", 16, "bold"), bg='#f0f0f0').pack(pady=20)
 
-        tk.Button(self._PageBase__frame, text="View Profile", command=self.view_profile, font=("Helvetica", 12), bg='#28a745', fg='#ffffff').pack()
-        tk.Button(self._PageBase__frame, text="Job Seeking", command=self.show_job_seeking_page, font=("Helvetica", 12), bg='#007bff', fg='#ffffff').pack()
-        tk.Button(self._PageBase__frame, text="Feedback", command=self.show_feedback_page, font=("Helvetica", 12), bg='#ffc107', fg='#000000').pack()
-        tk.Button(self._PageBase__frame, text="Settings", command=self.show_settings, font=("Helvetica", 12), bg='#17a2b8', fg='#ffffff').pack()
+        # User Information Section
+        user_info_frame = tk.Frame(self._PageBase__frame, bg='#f0f0f0')
+        user_info_frame.pack(pady=10, padx=20, fill='both')
 
-        tk.Button(self._PageBase__frame, text="Logout", command=self.logout, font=("Helvetica", 12), bg='#dc3545', fg='#ffffff').pack()
+        tk.Label(user_info_frame, text="User Information", font=("Helvetica", 14, "bold"), bg='#f0f0f0').pack(anchor=tk.W, pady=10)
+        tk.Label(user_info_frame, text="Name: Shubh Agrawal", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
+        tk.Label(user_info_frame, text="Email: shubh@gmail.com", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
+        tk.Label(user_info_frame, text="Location: Bangalore, INDIA", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
+
+        # Navigation Buttons
+        navigation_frame = tk.Frame(self._PageBase__frame, bg='#f0f0f0')
+        navigation_frame.pack(pady=20)
+
+        tk.Button(navigation_frame, text="View Profile", command=self.view_profile, font=("Helvetica", 12), bg='#007bff', fg='#ffffff').pack(side=tk.LEFT, padx=10)
+        tk.Button(navigation_frame, text="Job Seeking", command=self.show_job_seeking_page, font=("Helvetica", 12), bg='#007bff', fg='#ffffff').pack(side=tk.LEFT, padx=10)
+        tk.Button(navigation_frame, text="Feedback", command=self.show_feedback_page, font=("Helvetica", 12), bg='#007bff', fg='#ffffff').pack(side=tk.LEFT, padx=10)
+        tk.Button(navigation_frame, text="Settings", command=self.show_settings, font=("Helvetica", 12), bg='#007bff', fg='#ffffff').pack(side=tk.LEFT, padx=10)
+
+        tk.Button(navigation_frame, text="Logout", command=self.logout, font=("Helvetica", 12), bg='#dc3545', fg='#ffffff').pack(side=tk.RIGHT, padx=10)
         if self.master._history:
-            tk.Button(self._PageBase__frame, text="Go Back", command=self.go_back, font=("Helvetica", 12), bg='#343a40', fg='#ffffff').pack()
+            tk.Button(navigation_frame, text="Go Back", command=self.go_back, font=("Helvetica", 12), bg='#343a40', fg='#ffffff').pack(side=tk.RIGHT, padx=10)
 
     def view_profile(self):
-        self.navigate_to(ViewProfilePage)  
+        self.navigate_to(ViewProfilePage, self.username)
 
     def show_job_seeking_page(self):
-        self.navigate_to(JobSeekingPage)  
+        self.navigate_to(JobSeekingPage)
 
     def show_feedback_page(self):
-        self.navigate_to(FeedbackPage)  
+        self.navigate_to(FeedbackPage)
 
-    def navigate_to(self, page_class):
-        self.master._history.append(self)  
-        self.destroy()  
-        page_class(self.master, self.username).pack()  
+    def navigate_to(self, page_class, *args):
+        self.master._history.append(self)
+        self.destroy()
+        page_class(self.master, *args).pack()
 
     def logout(self):
-        self.destroy()  
-        LoginPage(self.master).pack()  
+        self.destroy()
+        LoginPage(self.master).pack()
 
     def show_settings(self):
         messagebox.showinfo("Settings", "No settings available in this demo")
-
 # View Profile Page class, inheriting from PageBase
 class ViewProfilePage(PageBase):
     def __init__(self, master, username):
