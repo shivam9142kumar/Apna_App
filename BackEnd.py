@@ -20,10 +20,10 @@ def connect_to_database(config):
             return con
     except mysql.connector.Error as err:
 
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR: # type: ignore
             print("Something is wrong with your user name or password")
 
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+        elif err.errno == errorcode.ER_BAD_DB_ERROR: # type: ignore
             print("Database does not exist")
 
 
