@@ -123,7 +123,7 @@ class LoginPage(PageBase):
             else:
                 messagebox.showerror("Error", "Invalid password.")
         else:
-            messagebox.showerror("Error", "Invalid username.")
+            messagebox.showerror("Error", "Invalid username.")
     def sign_up(self):
         self.master._history.append(self)  
         self.destroy()  
