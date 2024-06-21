@@ -118,7 +118,8 @@ class LoginPage(PageBase):
         if var:
             if password == var[-1]:
                 messagebox.showinfo("Success", "Login Successful!")
-                self.show_loading_page()
+                self.destroy()
+                ProfilePage(self.master, username).pack()
             else:
                 messagebox.showerror("Error", "Invalid password.")
         else:
