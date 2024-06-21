@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+import BackEnd
 
 # Base class for all pages in the application
 class PageBase:
@@ -41,15 +42,24 @@ class LoginPage(PageBase):
         tk.Button(self._PageBase__frame, text="Sign Up", command=self.sign_up, font=("Helvetica", 12), bg='#28a745', fg='#ffffff').pack(pady=5, padx=10)  
 
     def login(self):
+<<<<<<< HEAD
+        username = self.username_entry.get()
+        password = self.password_entry.get()  
+        var = BackEnd.userInfo(username)  
+=======
         username = self.username_entry.get().strip()
         password = self.password_entry.get().strip()
+>>>>>>> 8010188cf3822c9e8f431c6c601a0b20e3a2b1a2
 
-        if username == "shubh" and password == "0000":  
-            self.destroy()  
-            ProfilePage(self.master, username).pack()  
+        self.user = var
+        if var:
+            if password == var[-1]:
+                messagebox.showinfo("Success", "Login Successful!")
+                self.show_loading_page()
+            else:
+                messagebox.showerror("Error", "Invalid password.")
         else:
-            messagebox.showerror("Login Failed", "Invalid username or password")  
-
+            messagebox.showerror("Error", "Invalid username.")
     def sign_up(self):
         self.master._history.append(self)  
         self.destroy()  
