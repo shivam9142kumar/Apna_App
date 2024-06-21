@@ -112,7 +112,7 @@ class LoginPage(PageBase):
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()  
-        var = BackEnd.userInfo(username)  
+        var = userInfo(username)  
 
         self.user = var
         if var:
