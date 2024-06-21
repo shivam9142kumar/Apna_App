@@ -42,14 +42,9 @@ class LoginPage(PageBase):
         tk.Button(self._PageBase__frame, text="Sign Up", command=self.sign_up, font=("Helvetica", 12), bg='#28a745', fg='#ffffff').pack(pady=5, padx=10)  
 
     def login(self):
-<<<<<<< HEAD
         username = self.username_entry.get()
         password = self.password_entry.get()  
         var = BackEnd.userInfo(username)  
-=======
-        username = self.username_entry.get().strip()
-        password = self.password_entry.get().strip()
->>>>>>> 8010188cf3822c9e8f431c6c601a0b20e3a2b1a2
 
         self.user = var
         if var:
