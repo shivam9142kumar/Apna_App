@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+
 #import BackEnd
 import mysql.connector
 
@@ -26,17 +27,13 @@ def connect_to_database(config):
 
         elif err.errno == errorcode.ER_BAD_DB_ERROR: # type: ignore
             print("Database does not exist")
-
-
         else:
-
             print(err)
     return None
 
 con = connect_to_database(config)
 if con:
     cur = con.cursor()
-
 
 #Defining the function for adding the Details of User in the Database
 
@@ -52,14 +49,12 @@ def addData(Name, Email_id, Skills, Phone_no, Degree, Password):
     con.commit()
     con.close()
 
-
 #Defining the function for Viewing the Details of User in the Database
 def viewData():
     cur.execute("SELECT * FROM User")
     user_val = cur.fetchall()
     con.close()
     return user_val
-
 
 #Defining the function for deleting the Details of User in the Database
 def DeleteData(uid):
@@ -68,9 +63,8 @@ def DeleteData(uid):
     con.close()
 
 
-
-
 # Base class for all pages in the application
+
 class PageBase:
     def __init__(self, master, bg_color='#ffffff'): 
         self.master = master
@@ -90,6 +84,7 @@ class PageBase:
             previous_page.pack()  # Display the previous page
 
 # Login Page class, inheriting from PageBase
+
 class LoginPage(PageBase):
     def __init__(self, master):
         super().__init__(master, bg_color='#f0f0f0')  # Light gray background
@@ -130,6 +125,7 @@ class LoginPage(PageBase):
         SignUpPage(self.master).pack()  
 
 # SignUp Page class, inheriting from PageBase
+
 class SignUpPage(PageBase):
     def __init__(self, master):
         super().__init__(master, bg_color='#f0f0f0')  
@@ -180,6 +176,7 @@ class SignUpPage(PageBase):
         LoginPage(self.master).pack()
 
 # Profile Page class, inheriting from PageBase
+
 class ProfilePage(PageBase):
     def __init__(self, master, username):
         super().__init__(master, bg_color='#f0f0f0')
@@ -231,6 +228,7 @@ class ProfilePage(PageBase):
         messagebox.showinfo("Settings", "No settings available in this demo")
 
 # View Profile Page class, inheriting from PageBase
+
 class ViewProfilePage(PageBase):
     def __init__(self, master, username):
         super().__init__(master, bg_color='#f0f0f0')  
@@ -251,6 +249,7 @@ class ViewProfilePage(PageBase):
         messagebox.showinfo("Edit Profile", "Edit profile functionality will be implemented here.")  
 
 # JobSeekingPage class, inheriting from PageBase
+
 class JobSeekingPage(PageBase):
     def __init__(self, master):
         super().__init__(master, bg_color='#f0f0f0')  
@@ -285,6 +284,7 @@ class JobSeekingPage(PageBase):
         print(f"Filtering jobs by company: {selected_company}")  
 
 # FeedbackPage class, inheriting from PageBase
+
 class FeedbackPage(PageBase):
     def __init__(self, master):
         super().__init__(master, bg_color='#f0f0f0')  
@@ -318,6 +318,7 @@ class FeedbackPage(PageBase):
             messagebox.showerror("Error", "Please select feedback type and provide feedback text.")  
 
 # Main application entry point
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Apna IT Application")
