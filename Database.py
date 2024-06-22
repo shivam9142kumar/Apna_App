@@ -63,20 +63,36 @@ for tb in apna:
     print(tb)
 
 
-# Inserting values into the database
+#Inserting values into the database
 
-# Declaring a variable for the formula
+#Creating a Query for Inserting Data into the table
 user_form = "INSERT INTO User (Name, Email_id, Skills, Phone_no, Degree, Password) VALUES (%s, %s, %s, %s, %s, %s)"
 
-# Declaring a array to store all the values that I want to insert into the table 
+#Declaring a array to store all the values that I want to insert into the table 
 Values = [("Yash", "yash@gmail.com", "Engineer", "2348576", "B.Tech.", "yash"),
           ("Shivam", "shivam@gmail.com", "Backend Engineer", "52358", "B.Tech.", "shivam"),
           ("Gautam", "gautam@gmail.com", "Software Developer", "1235789", "B.Tech.", "gautam"),
           ("Amaan", "amaan@gmail.com", "GUI Engineer", "1547693", "B.Tech.", "amaan"),
           ("Roshan", "roshan@gmail.com", "Backend Engineer", "2547693", "B.Tech.", "roshan")]
 
-# Executing the above to variables for insertion
-apna.execute(user_form, Values)
+#Executing the above to variables for insertion
+apna.executemany(user_form, Values)
 
-# Commiting the queries to the table and database (if not commited then no changes will be done in the table)
+#Commiting the queries to the table and database (if not commited then no changes will be done in the table)
 mydb.commit()
+
+
+#Displaying all the data from the prefered table
+
+# Creating Query for displaying all the data in the table
+display = "SELECT * FROM user"
+
+#Executing the above queries
+apna.execute(display)
+
+#Fetching all the data from the last executed statement
+result = apna.fetchall()
+
+#Python code for executing the above query
+for row in result:
+    print(row)
