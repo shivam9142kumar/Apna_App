@@ -1,3 +1,4 @@
+# Import necessary modules
 import tkinter as tk
 from tkinter import messagebox
 
@@ -5,7 +6,8 @@ from tkinter import messagebox
 class PageBase:
     def __init__(self, master, bg_color='#ffffff'): 
         self.master = master
-        self.__frame = tk.Frame(master, bg=bg_color)
+        self.bg_color = bg_color  # Store the background color for this page
+        self.__frame = tk.Frame(master, bg=self.bg_color)
         self.__frame.pack(pady=20, padx=20, fill='both', expand=True)
 
     def pack(self):
@@ -16,29 +18,71 @@ class PageBase:
 
     def go_back(self):
         if self.master._history:
-            previous_page = self.master._history.pop()  
-            self.destroy()  
-            previous_page.pack()  
+            previous_page = self.master._history.pop()  # Remove the last page from history
+            self.destroy()  # Destroy the current page
+            previous_page.pack()  # Display the previous page
+
+# Custom styled button class with rounded corners and hover effects
+class CustomButton(tk.Canvas):
+    def __init__(self, master, text, command, bg='#007bff', fg='#ffffff', width=200, height=40, hover_bg=None):
+        super().__init__(master, width=width, height=height, bd=0, highlightthickness=0)
+        self.command = command
+        self.default_bg = bg
+        self.bg = bg
+        self.fg = fg
+        self.text = text
+        self.width = width
+        self.height = height
+        self.hover_bg = hover_bg or self.bg
+
+        self.create_rounded_button()
+        self.bind("<Button-1>", self.on_click)
+        self.bind("<Enter>", self.on_enter)
+        self.bind("<Leave>", self.on_leave)
+
+    def create_rounded_button(self):
+        self.delete("all")
+        radius = 20
+        self.create_arc((0, 0, radius, radius), start=90, extent=90, fill=self.bg, outline=self.bg)
+        self.create_arc((self.width-radius, 0, self.width, radius), start=0, extent=90, fill=self.bg, outline=self.bg)
+        self.create_arc((self.width-radius, self.height-radius, self.width, self.height), start=270, extent=90, fill=self.bg, outline=self.bg)
+        self.create_arc((0, self.height-radius, radius, self.height), start=180, extent=90, fill=self.bg, outline=self.bg)
+        self.create_rectangle((radius/2, 0, self.width-radius/2, self.height), fill=self.bg, outline=self.bg)
+        self.create_rectangle((0, radius/2, self.width, self.height-radius/2), fill=self.bg, outline=self.bg)
+        self.create_text(self.width/2, self.height/2, text=self.text, fill=self.fg, font=("Helvetica", 12))
+
+    def on_click(self, event):
+        if self.command:
+            self.command()
+
+    def on_enter(self, event):
+        self.bg = self.hover_bg
+        self.create_rounded_button()
+
+    def on_leave(self, event):
+        self.bg = self.default_bg
+        self.create_rounded_button()
 
 # Login Page class, inheriting from PageBase
 class LoginPage(PageBase):
     def __init__(self, master):
-        super().__init__(master, bg_color='#f0f0f0')  
+        super().__init__(master, bg_color='#f0f0f0')  # Light gray background
         self.username_entry = None
         self.password_entry = None
         self.create_widgets()
 
     def create_widgets(self):
-        tk.Label(self._PageBase__frame, text="Username:", font=("Helvetica", 14), bg='#f0f0f0').pack()  
-        self.username_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12))  
+        tk.Label(self._PageBase__frame, text="Login", font=("Helvetica", 18, "bold"), bg=self.bg_color).pack(pady=10)
+        tk.Label(self._PageBase__frame, text="Username:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        self.username_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12), bd=2, relief="solid", width=30)  
         self.username_entry.pack(pady=5)
 
-        tk.Label(self._PageBase__frame, text="Password:", font=("Helvetica", 14), bg='#f0f0f0').pack()  
-        self.password_entry = tk.Entry(self._PageBase__frame, show='*', font=("Helvetica", 12))  
+        tk.Label(self._PageBase__frame, text="Password:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        self.password_entry = tk.Entry(self._PageBase__frame, show='*', font=("Helvetica", 12), bd=2, relief="solid", width=30)  
         self.password_entry.pack(pady=5)
 
-        tk.Button(self._PageBase__frame, text="Login", command=self.login, font=("Helvetica", 12), bg='#007bff', fg='#ffffff').pack(pady=10, padx=10)  
-        tk.Button(self._PageBase__frame, text="Sign Up", command=self.sign_up, font=("Helvetica", 12), bg='#28a745', fg='#ffffff').pack(pady=5, padx=10)  
+        CustomButton(self._PageBase__frame, text="Login", command=self.login, hover_bg='#0056b3').pack(pady=10)
+        CustomButton(self._PageBase__frame, text="Sign Up", command=self.sign_up, bg='#dc3545', hover_bg='#c82333').pack(pady=5)
 
     def login(self):
         username = self.username_entry.get()  
@@ -69,38 +113,38 @@ class SignUpPage(PageBase):
         self.create_widgets()
 
     def create_widgets(self):
-        tk.Label(self._PageBase__frame, text="Sign Up", font=("Helvetica", 16, "bold"), bg='#f0f0f0').pack(pady=10)
+        tk.Label(self._PageBase__frame, text="Sign Up", font=("Helvetica", 16, "bold"), bg=self.bg_color).pack(pady=10)
 
-        tk.Label(self._PageBase__frame, text="Username:", font=("Helvetica", 14), bg='#f0f0f0').pack()  
-        self.username_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12))  
+        tk.Label(self._PageBase__frame, text="Username:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        self.username_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12), bd=2, relief="solid", width=30)  
         self.username_entry.pack(pady=5)
 
-        tk.Label(self._PageBase__frame, text="Email ID:", font=("Helvetica", 14), bg='#f0f0f0').pack()  
-        self.email_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12))  
+        tk.Label(self._PageBase__frame, text="Email ID:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        self.email_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12), bd=2, relief="solid", width=30)  
         self.email_entry.pack(pady=5)
 
-        tk.Label(self._PageBase__frame, text="Skills:", font=("Helvetica", 14), bg='#f0f0f0').pack()  
-        self.skills_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12))  
+        tk.Label(self._PageBase__frame, text="Skills:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        self.skills_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12), bd=2, relief="solid", width=30)  
         self.skills_entry.pack(pady=5)
 
-        tk.Label(self._PageBase__frame, text="Phone Number:", font=("Helvetica", 14), bg='#f0f0f0').pack()  
-        self.phone_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12))  
+        tk.Label(self._PageBase__frame, text="Phone Number:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        self.phone_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12), bd=2, relief="solid", width=30)  
         self.phone_entry.pack(pady=5)
 
-        tk.Label(self._PageBase__frame, text="Degree:", font=("Helvetica", 14), bg='#f0f0f0').pack()  
-        self.degree_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12))  
+        tk.Label(self._PageBase__frame, text="Degree:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        self.degree_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12), bd=2, relief="solid", width=30)  
         self.degree_entry.pack(pady=5)
 
-        tk.Label(self._PageBase__frame, text="Password:", font=("Helvetica", 14), bg='#f0f0f0').pack()  
-        self.password_entry = tk.Entry(self._PageBase__frame, show='*', font=("Helvetica", 12))  
+        tk.Label(self._PageBase__frame, text="Password:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        self.password_entry = tk.Entry(self._PageBase__frame, show='*', font=("Helvetica", 12), bd=2, relief="solid", width=30)  
         self.password_entry.pack(pady=5)
 
-        tk.Label(self._PageBase__frame, text="Confirm Password:", font=("Helvetica", 14), bg='#f0f0f0').pack()  
-        self.confirm_password_entry = tk.Entry(self._PageBase__frame, show='*', font=("Helvetica", 12))  
+        tk.Label(self._PageBase__frame, text="Confirm Password:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        self.confirm_password_entry = tk.Entry(self._PageBase__frame, show='*', font=("Helvetica", 12), bd=2, relief="solid", width=30)  
         self.confirm_password_entry.pack(pady=5)
 
-        tk.Button(self._PageBase__frame, text="Submit", command=self.submit, font=("Helvetica", 12), bg='#007bff', fg='#ffffff').pack(pady=10, padx=10)  
-        tk.Button(self._PageBase__frame, text="Cancel", command=self.cancel, font=("Helvetica", 12), bg='#dc3545', fg='#ffffff').pack(pady=5, padx=10)  
+        CustomButton(self._PageBase__frame, text="Submit", command=self.submit).pack(pady=10)  
+        CustomButton(self._PageBase__frame, text="Cancel", command=self.cancel, bg='#dc3545', hover_bg='#c82333').pack(pady=5)  
 
     def submit(self):
         username = self.username_entry.get().strip()  
@@ -134,142 +178,131 @@ class ProfilePage(PageBase):
     def __init__(self, master, username):
         super().__init__(master, bg_color='#f0f0f0')  
         self.username = username  
-        self.phone_number = "9898989898"  
-        self.degree = "Btech CSE with specialization in Machine Learning"  
-        self.skills = "PYTHON, JAVA, R, SQL"  
-        self.languages = "English, Hindi"  
-        self.interests = "Machine Learning, Data Science"  
-        self.certifications = "Certification in Python, Certification in Data Science"  
-        self.experience = "2 years"  
-        self.current_role = "Software Engineer"  
         self.create_widgets()
 
     def create_widgets(self):
-        tk.Label(self._PageBase__frame, text=f"Welcome, {self.username}!", font=("Helvetica", 16, "bold"), bg='#f0f0f0').pack(pady=10)
+        tk.Label(self._PageBase__frame, text=f"Welcome, {self.username}!", font=("Helvetica", 18, "bold"), bg=self.bg_color).pack(pady=10)
         
-        tk.Label(self._PageBase__frame, text="User Information", font=("Helvetica", 14, "bold"), bg='#f0f0f0').pack(pady=10)
-        tk.Label(self._PageBase__frame, text=f"Name: Shubh Agrawal", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text=f"Email: shubh@gmail.com", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text=f"Phone Number: {self.phone_number}", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text=f"Degree: {self.degree}", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text=f"Skills: {self.skills}", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text=f"Languages: {self.languages}", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text=f"Interests: {self.interests}", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text=f"Certifications: {self.certifications}", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text=f"Experience: {self.experience}", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text=f"Current Role: {self.current_role}", font=("Helvetica", 12), bg='#f0f0f0').pack(anchor=tk.W)
-        
-        tk.Button(self._PageBase__frame, text="Job Seeking Preferences", command=self.job_seeking, font=("Helvetica", 12), bg='#007bff', fg='#ffffff').pack(pady=10, padx=10)
-        tk.Button(self._PageBase__frame, text="Give Feedback", command=self.feedback, font=("Helvetica", 12), bg='#28a745', fg='#ffffff').pack(pady=5, padx=10)
-        tk.Button(self._PageBase__frame, text="Logout", command=self.logout, font=("Helvetica", 12), bg='#dc3545', fg='#ffffff').pack(pady=5, padx=10)
+        tk.Label(self._PageBase__frame, text="User Information", font=("Helvetica", 14, "bold"), bg=self.bg_color).pack(pady=10)
+        tk.Label(self._PageBase__frame, text="Name: Shubh Agrawal", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
+        tk.Label(self._PageBase__frame, text="Email: shubh@gmail.com", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
+        tk.Label(self._PageBase__frame, text="Location: Bangalore, INDIA", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
 
-    def job_seeking(self):
+        button_frame = tk.Frame(self._PageBase__frame, bg=self.bg_color)
+        button_frame.pack(pady=10)
+
+        # First row
+        CustomButton(button_frame, text="View Profile", command=self.view_profile, bg='#28a745', hover_bg='#218838').grid(row=0, column=0, padx=10)
+        CustomButton(button_frame, text="Job Seeking", command=self.show_job_seeking_page, hover_bg='#0056b3').grid(row=0, column=1, padx=10)
+        CustomButton(button_frame, text="Feedback", command=self.show_feedback_page, bg='#ffc107', fg='#000000', hover_bg='#e0a800').grid(row=0, column=2, padx=10)
+
+        # Second row
+        CustomButton(self._PageBase__frame, text="Settings", command=self.show_settings, bg='#17a2b8', hover_bg='#138496').pack(pady=10)
+
+        # Third row
+        CustomButton(self._PageBase__frame, text="Logout", command=self.logout, bg='#dc3545', hover_bg='#c82333').pack()
+
+        if self.master._history:
+            CustomButton(self._PageBase__frame, text="Go Back", command=self.go_back, bg='#343a40', hover_bg='#23272b').pack()
+
+    def view_profile(self):
+        messagebox.showinfo("Profile", "Username: shubh\nEmail: shubh@gmail.com\nSkills: Python, JavaScript\nPhone Number: +91 9876543210\nDegree: Bachelor of Engineering")  
+
+    def show_job_seeking_page(self):
         self.master._history.append(self)  
         self.destroy()  
-        JobSeekingPage(self.master, self.username).pack()  
+        JobSeekingPage(self.master).pack()  
 
-    def feedback(self):
+    def show_feedback_page(self):
         self.master._history.append(self)  
         self.destroy()  
-        FeedbackPage(self.master, self.username).pack()  
+        FeedbackPage(self.master).pack()  
+
+    def show_settings(self):
+        messagebox.showinfo("Settings", "Settings page not implemented yet.")  
 
     def logout(self):
-        self.master._history.clear()  
         self.destroy()  
         LoginPage(self.master).pack()  
 
 # Job Seeking Page class, inheriting from PageBase
 class JobSeekingPage(PageBase):
-    def __init__(self, master, username):
+    def __init__(self, master):
         super().__init__(master, bg_color='#f0f0f0')  
-        self.username = username  
-        self.desired_roles_entry = None
-        self.desired_locations_entry = None
         self.create_widgets()
 
     def create_widgets(self):
-        tk.Label(self._PageBase__frame, text=f"Job Seeking Page for {self.username}", font=("Helvetica", 16, "bold"), bg='#f0f0f0').pack(pady=10)
+        tk.Label(self._PageBase__frame, text="Job Seeking", font=("Helvetica", 18, "bold"), bg=self.bg_color).pack(pady=10)
 
-        tk.Label(self._PageBase__frame, text="Desired Roles:", font=("Helvetica", 14), bg='#f0f0f0').pack()
-        self.desired_roles_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12))  
-        self.desired_roles_entry.pack(pady=5)
+        tk.Label(self._PageBase__frame, text="Desired Roles:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        desired_roles_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12), bd=2, relief="solid", width=30)  
+        desired_roles_entry.pack(pady=5)
 
-        tk.Label(self._PageBase__frame, text="Desired Locations:", font=("Helvetica", 14), bg='#f0f0f0').pack()
-        self.desired_locations_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12))  
-        self.desired_locations_entry.pack(pady=5)
+        tk.Label(self._PageBase__frame, text="Remote/Online Preference:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        remote_preference_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12), bd=2, relief="solid", width=30)  
+        remote_preference_entry.pack(pady=5)
 
-        tk.Button(self._PageBase__frame, text="Save Preferences", command=self.save_preferences, font=("Helvetica", 12), bg='#007bff', fg='#ffffff').pack(pady=10)
-        tk.Button(self._PageBase__frame, text="Go Back", command=self.go_back, font=("Helvetica", 12), bg='#343a40', fg='#ffffff').pack()
+        tk.Label(self._PageBase__frame, text="Preferred Salary:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        preferred_salary_entry = tk.Entry(self._PageBase__frame, font=("Helvetica", 12), bd=2, relief="solid", width=30)  
+        preferred_salary_entry.pack(pady=5)
 
-    def save_preferences(self):
-        desired_roles = self.desired_roles_entry.get().strip()
-        desired_locations = self.desired_locations_entry.get().strip()
+        CustomButton(self._PageBase__frame, text="Submit", command=self.submit, hover_bg='#0056b3').pack(pady=10)  
+        CustomButton(self._PageBase__frame, text="Go Back", command=self.go_back, bg='#343a40', hover_bg='#23272b').pack(pady=5)  
 
-        if desired_roles and desired_locations:
-            messagebox.showinfo("Preferences Saved", "Your job preferences have been saved successfully!")
-        else:
-            messagebox.showerror("Error", "Please fill out all fields before saving preferences.")
+    def submit(self):
+        # Placeholder for submitting job seeking details
+        messagebox.showinfo("Job Seeking", "Job seeking details submitted successfully.")  
 
     def go_back(self):
+        self.master._history.pop()  
+        self.destroy()  
         if self.master._history:
-            previous_page = self.master._history.pop()  
-            self.destroy()  
-            previous_page.pack()  
+            self.master._history[-1].pack()  
+        else:
+            ProfilePage(self.master, "shubh").pack()  
 
 # Feedback Page class, inheriting from PageBase
 class FeedbackPage(PageBase):
-    def __init__(self, master, username):
+    def __init__(self, master):
         super().__init__(master, bg_color='#f0f0f0')  
-        self.username = username  
-        self.feedback_text = None
-        self.feedback_category = None
-        self.feedback_rating = None
         self.create_widgets()
 
     def create_widgets(self):
-        tk.Label(self._PageBase__frame, text=f"Feedback Page for {self.username}", font=("Helvetica", 16, "bold"), bg='#f0f0f0').pack(pady=10)
+        tk.Label(self._PageBase__frame, text="Feedback", font=("Helvetica", 18, "bold"), bg=self.bg_color).pack(pady=10)
 
-        tk.Label(self._PageBase__frame, text="Feedback Category:", font=("Helvetica", 14), bg='#f0f0f0').pack()
-        self.feedback_category = tk.Entry(self._PageBase__frame, font=("Helvetica", 12))  
-        self.feedback_category.pack(pady=5)
+        tk.Label(self._PageBase__frame, text="Your Feedback:", font=("Helvetica", 14), bg=self.bg_color).pack()  
+        feedback_entry = tk.Text(self._PageBase__frame, font=("Helvetica", 12), bd=2, relief="solid", width=40, height=10)  
+        feedback_entry.pack(pady=5)
 
-        tk.Label(self._PageBase__frame, text="Your feedback:", font=("Helvetica", 14), bg='#f0f0f0').pack()
-        self.feedback_text = tk.Text(self._PageBase__frame, width=40, height=5, font=("Helvetica", 12))
-        self.feedback_text.pack(pady=10)
-
-        tk.Label(self._PageBase__frame, text="Rating (1-5):", font=("Helvetica", 14), bg='#f0f0f0').pack()
-        self.feedback_rating = tk.Entry(self._PageBase__frame, font=("Helvetica", 12))  
-        self.feedback_rating.pack(pady=5)
-
-        tk.Button(self._PageBase__frame, text="Submit Feedback", command=self.submit_feedback, font=("Helvetica", 12), bg='#007bff', fg='#ffffff').pack()
-        tk.Button(self._PageBase__frame, text="Go Back", command=self.go_back, font=("Helvetica", 12), bg='#343a40', fg='#ffffff').pack()
+        CustomButton(self._PageBase__frame, text="Submit Feedback", command=self.submit_feedback, hover_bg='#ffc107').pack(pady=10)  
+        CustomButton(self._PageBase__frame, text="Go Back", command=self.go_back, bg='#343a40', hover_bg='#23272b').pack(pady=5)  
 
     def submit_feedback(self):
-        category = self.feedback_category.get().strip()
-        feedback = self.feedback_text.get("1.0", tk.END).strip()
-        rating = self.feedback_rating.get().strip()
-
-        if category and feedback and rating.isdigit() and 1 <= int(rating) <= 5:
-            messagebox.showinfo("Feedback Submitted", "Thank you for your feedback!")
-        else:
-            messagebox.showerror("Error", "Please fill out all fields correctly before submitting.")
+        # Placeholder for submitting feedback
+        messagebox.showinfo("Feedback", "Feedback submitted successfully.")  
 
     def go_back(self):
+        self.master._history.pop()  
+        self.destroy()  
         if self.master._history:
-            previous_page = self.master._history.pop()  
-            self.destroy()  
-            previous_page.pack()  
+            self.master._history[-1].pack()  
+        else:
+            ProfilePage(self.master, "shubh").pack()  
 
-# Main application class
-class Application(tk.Tk):
+# Main Application class
+class MyApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Job Portal Application")
+        self.title("My Application")
         self.geometry("600x400")
-        self._history = []  
-        LoginPage(self).pack()  
+        self.configure(bg='#e3f2fd')  # Light blue background color
+        self._history = []  # To store page history
 
+        self._initialize()
+
+    def _initialize(self):
+        LoginPage(self).pack()
 
 if __name__ == "__main__":
-    app = Application()
+    app = MyApp()
     app.mainloop()
