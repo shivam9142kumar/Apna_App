@@ -7,7 +7,7 @@ from mysql.connector import *
 #PHASE - I
 
 #Defining an object for MySQL
-mydb = mysql.connector.connect(host="localhost", user="root", password="******")
+mydb = mysql.connector.connect(host="localhost", user="root", password="yash@7940")
 
 #Initialising a Cursor-> It is the object that entirely communicates with the entire MySQL server
 apna = mydb.cursor()
@@ -26,7 +26,7 @@ for db in apna:
 #For phase 2 we will use the same cursor which was in phase 1
 
 #Defining an object for MySQL with the database created above
-mydb = mysql.connector.connect(host="localhost", user="root", password="*****", database="apna")
+mydb = mysql.connector.connect(host="localhost", user="root", password="yash@7940", database="apna")
 
 #Creating Queries for Tables for the database
 #"User" Table Query
