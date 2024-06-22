@@ -39,17 +39,21 @@ if con:
 
 #Defining the function for adding the Details of User in the Database
 
-def userInfo(Name):
-    cur.execute("SELECT * FROM user WHERE Name = %s", (Name,))
+def userInfo(Email_id):
+    cur.execute("SELECT * FROM user WHERE Email_id = %s", (Email_id,))
     value = cur.fetchone()
     con.commit()
     con.close()
     return value
 
 def addData(Name, Email_id, Skills, Phone_no, Degree, Password):
-    cur.execute("INSERT INTO User VALUES (, %s, %s, %s, %s, %s, %s)", Name, Email_id, Skills, Phone_no, Degree, Password)
-    con.commit()
-    con.close()
+    try:
+        cur.execute("INSERT INTO User (Name, Email_id, Skills, Phone_no, Degree, Password) VALUES (%s, %s, %s, %s, %s, %s)",
+                    (Name, Email_id, Skills, Phone_no, Degree, Password))
+        con.commit()
+        con.close()
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
 
 
 #Defining the function for Viewing the Details of User in the Database
