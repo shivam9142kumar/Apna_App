@@ -1,7 +1,7 @@
-#Importing the sqlinte3 Module for the BackEnd
-# import sqlite3
+#Importing the mysql.connector Module for the BackEnd
 import mysql.connector
 
+# Configuring 
 config = {
     'user': 'root',
     'password': 'yash@7940',
@@ -47,7 +47,7 @@ def userInfo(Name):
     return value
 
 def addData(Name, Email_id, Skills, Phone_no, Degree, Password):
-    cur.execute("INSERT INTO User VALUES (NULL, ?, ?, ?, ?, ?, ?)", Name, Email_id, Skills, Phone_no, Degree, Password)
+    cur.execute("INSERT INTO User VALUES (, %s, %s, %s, %s, %s, %s)", Name, Email_id, Skills, Phone_no, Degree, Password)
     con.commit()
     con.close()
 
@@ -66,5 +66,5 @@ def DeleteData(uid):
     user_val = cur.fetchall()
     con.close()
 
-a = userInfo("Yash", "yash")
+a = userInfo("Yash")
 print(a)
