@@ -30,22 +30,22 @@ mydb = mysql.connector.connect(host="localhost", user="root", password="yash@794
 
 #Creating Queries for Tables for the database
 #"User" Table Query
-User = "CREATE TABLE User(uid VARCHAR(30) PRIMARY KEY, Name VARCHAR(100) NOT NULL, Email_id VARCHAR(70) NOT NULL UNIQUE, Skills VARCHAR(200) NOT NULL, Phone_no INT(11) NOT NULL UNIQUE, Degree VARCHAR(200), Password VARCHAR(100) NOT NULL)"
+User = "CREATE TABLE User(uid INT(30) AUTO_INCREMENT PRIMARY KEY, Name VARCHAR(100) NOT NULL, Email_id VARCHAR(70) NOT NULL UNIQUE, Skills VARCHAR(200) NOT NULL, Phone_no INT(11) NOT NULL UNIQUE, Degree VARCHAR(200), Password VARCHAR(100) NOT NULL)"
 
 #"Company" Table Query
-Company = "CREATE TABLE Company(cid VARCHAR(30) PRIMARY KEY, Name VARCHAR(100) NOT NULL, Email_id VARCHAR(100) NOT NULL UNIQUE)"
+Company = "CREATE TABLE Company(cid INT(30) AUTO_INCREMENT PRIMARY KEY, Name VARCHAR(100) NOT NULL, Email_id VARCHAR(100) NOT NULL UNIQUE)"
 
 #"Jobs" Table Query
-Jobs = "CREATE TABLE Jobs(jid VARCHAR(30) PRIMARY KEY, company_id VARCHAR(30) NOT NULL UNIQUE, FOREIGN KEY(company_id) REFERENCES Company(cid) ON DELETE CASCADE ON UPDATE CASCADE, Title VARCHAR(100) NOT NULL, Description VARCHAR(300) NOT NULL, Package INT(20) NOT NULL)"
+Jobs = "CREATE TABLE Jobs(jid INT(30) AUTO_INCREMENT PRIMARY KEY, company_id INT(30) NOT NULL UNIQUE, FOREIGN KEY(company_id) REFERENCES Company(cid) ON DELETE CASCADE ON UPDATE CASCADE, Title VARCHAR(100) NOT NULL, Description VARCHAR(300) NOT NULL, Package INT(20) NOT NULL)"
 
 #"Job_seeking" Table Query
-Job_seeking = "CREATE TABLE Job_seeking(jsid VARCHAR(30) PRIMARY KEY, user_id VARCHAR(30) NOT NULL, FOREIGN KEY(user_id) REFERENCES User(uid) ON DELETE CASCADE ON UPDATE CASCADE, job_id VARCHAR(30) NOT NULL, FOREIGN KEY(job_id) REFERENCES Jobs(jid) ON DELETE CASCADE ON UPDATE CASCADE)"
+Job_seeking = "CREATE TABLE Job_seeking(jsid INT(30) AUTO_INCREMENT PRIMARY KEY, user_id INT(30) NOT NULL, FOREIGN KEY(user_id) REFERENCES User(uid) ON DELETE CASCADE ON UPDATE CASCADE, job_id INT(30) NOT NULL, FOREIGN KEY(job_id) REFERENCES Jobs(jid) ON DELETE CASCADE ON UPDATE CASCADE)"
 
 #"Application" Table Query
-Application = "CREATE TABLE Application(aid VARCHAR(30) PRIMARY KEY, user_id VARCHAR(30) NOT NULL, FOREIGN KEY(user_id) REFERENCES User(uid) ON DELETE CASCADE ON UPDATE CASCADE, job_id VARCHAR(30) NOT NULL, FOREIGN KEY(job_id) REFERENCES Jobs(jid) ON DELETE CASCADE ON UPDATE CASCADE, Status VARCHAR(50) NOT NULL)"
+Application = "CREATE TABLE Application(aid INT(30) AUTO_INCREMENT PRIMARY KEY, user_id INT(30) NOT NULL, FOREIGN KEY(user_id) REFERENCES User(uid) ON DELETE CASCADE ON UPDATE CASCADE, job_id INT(30) NOT NULL, FOREIGN KEY(job_id) REFERENCES Jobs(jid) ON DELETE CASCADE ON UPDATE CASCADE, Status VARCHAR(50) NOT NULL)"
 
 #"Feedback" Table Query
-Feedback = "CREATE TABLE Feedback(fid VARCHAR(30) PRIMARY KEY, user_id VARCHAR(30) NOT NULL, FOREIGN KEY(user_id) REFERENCES User(uid) ON DELETE CASCADE ON UPDATE CASCADE, company_id VARCHAR(30) NOT NULL, FOREIGN KEY(company_id) REFERENCES Company(cid) ON DELETE CASCADE ON UPDATE CASCADE, Feedback VARCHAR(300) NOT NULL)"
+Feedback = "CREATE TABLE Feedback(fid INT(30) AUTO_INCREMENT PRIMARY KEY, user_id INT(30) NOT NULL, FOREIGN KEY(user_id) REFERENCES User(uid) ON DELETE CASCADE ON UPDATE CASCADE, company_id INT(30) NOT NULL, FOREIGN KEY(company_id) REFERENCES Company(cid) ON DELETE CASCADE ON UPDATE CASCADE, Feedback VARCHAR(300) NOT NULL)"
 
 #Executing the above Quries to create the tables
 apna.execute(User)
@@ -61,3 +61,22 @@ apna.execute("SHOW TABLES")
 #Python code to execute the above Query
 for tb in apna:
     print(tb)
+
+
+# Inserting values into the database
+
+# Declaring a variable for the formula
+user_form = "INSERT INTO User (Name, Email_id, Skills, Phone_no, Degree, Password) VALUES (%s, %s, %s, %s, %s, %s)"
+
+# Declaring a array to store all the values that I want to insert into the table 
+Values = [("Yash", "yash@gmail.com", "Engineer", "2348576", "B.Tech.", "yash"),
+          ("Shivam", "shivam@gmail.com", "Backend Engineer", "52358", "B.Tech.", "shivam"),
+          ("Gautam", "gautam@gmail.com", "Software Developer", "1235789", "B.Tech.", "gautam"),
+          ("Amaan", "amaan@gmail.com", "GUI Engineer", "1547693", "B.Tech.", "amaan"),
+          ("Roshan", "roshan@gmail.com", "Backend Engineer", "2547693", "B.Tech.", "roshan")]
+
+# Executing the above to variables for insertion
+apna.execute(user_form, Values)
+
+# Commiting the queries to the table and database (if not commited then no changes will be done in the table)
+mydb.commit()
