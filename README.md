@@ -30,6 +30,14 @@ If you are new to the application, click on the "Sign Up" button on the login pa
 
 Username: Enter a unique username for your account.
 
+Email ID: Enter your email address.
+
+Skills: List your skills relevant to job seeking, separated by commas.
+
+Phone Number: Enter your contact phone number.
+
+Degree: Specify your highest degree obtained (e.g., Bachelor's, Master's)
+
 Password: Choose a strong password and enter it into both the "Password" and "Confirm Password" fields.
 
 Click on the "Submit" button to register your account.
