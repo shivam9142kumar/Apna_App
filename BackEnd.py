@@ -69,13 +69,3 @@ def viewData():
         return user_val
     except mysql.connector.Error as err:
         print(f"Error: {err}")
-
-
-#Defining the function for deleting the Details of User in the Database
-def DeleteData(uid):
-    cur.execute("DELETE FROM User WHERE uid = ?", (uid ))
-    user_val = cur.fetchall()
-    con.close()
-
-a = userInfo("Yash")
-print(a)
