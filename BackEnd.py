@@ -37,15 +37,18 @@ if con:
     cur = con.cursor()
 
 
-#Defining the function for adding the Details of User in the Database
-
+#Defining the function for fetching the Details of User in the Database from the email_id attribute
 def userInfo(Email_id):
-    cur.execute("SELECT * FROM user WHERE Email_id = %s", (Email_id,))
-    value = cur.fetchone()
-    con.commit()
-    con.close()
-    return value
+    try:
+        cur.execute("SELECT * FROM user WHERE Email_id = %s", (Email_id,))
+        value = cur.fetchone()
+        con.commit()
+        con.close()
+        return value
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
 
+#Defining the function for adding the Details of User in the Database
 def addData(Name, Email_id, Skills, Phone_no, Degree, Password):
     try:
         cur.execute("INSERT INTO User (Name, Email_id, Skills, Phone_no, Degree, Password) VALUES (%s, %s, %s, %s, %s, %s)",
@@ -58,10 +61,14 @@ def addData(Name, Email_id, Skills, Phone_no, Degree, Password):
 
 #Defining the function for Viewing the Details of User in the Database
 def viewData():
-    cur.execute("SELECT * FROM User")
-    user_val = cur.fetchall()
-    con.close()
-    return user_val
+    try:
+        cur.execute("SELECT * FROM User")
+        user_val = cur.fetchall()
+        con.commit()
+        con.close()
+        return user_val
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
 
 
 #Defining the function for deleting the Details of User in the Database
