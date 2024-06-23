@@ -2,6 +2,80 @@
 import tkinter as tk
 from tkinter import messagebox
 
+#BackEnd code for the project
+import mysql.connector
+
+# Configuring 
+config = {
+    'user': 'root',
+    'password': 'yash@7940',
+    'host': '127.0.0.1',
+    'database': 'apna'
+}
+
+def connect_to_database(config):
+    try:
+        con = mysql.connector.connect(**config)
+        if con.is_connected():
+
+            print("Connection successful")
+            cur = con.cursor()
+
+            return con
+    except mysql.connector.Error as err:
+
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR: # type: ignore
+            print("Something is wrong with your user name or password")
+
+        elif err.errno == errorcode.ER_BAD_DB_ERROR: # type: ignore
+            print("Database does not exist")
+
+
+        else:
+
+            print(err)
+    return None
+
+con = connect_to_database(config)
+if con:
+    cur = con.cursor()
+
+
+#Defining the function for fetching the Details of User in the Database from the email_id attribute
+def userInfo(Email_id):
+    try:
+        cur.execute("SELECT * FROM user WHERE Email_id = %s", (Email_id,))
+        value = cur.fetchone()
+        con.commit()
+        con.close()
+        return value
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+
+#Defining the function for adding the Details of User in the Database
+def addData(Name, Email_id, Skills, Phone_no, Degree, Password):
+    try:
+        cur.execute("INSERT INTO User (Name, Email_id, Skills, Phone_no, Degree, Password) VALUES (%s, %s, %s, %s, %s, %s)",
+                    (Name, Email_id, Skills, Phone_no, Degree, Password))
+        con.commit()
+        con.close()
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+
+
+#Defining the function for Viewing the Details of User in the Database
+def viewData():
+    try:
+        cur.execute("SELECT * FROM User")
+        user_val = cur.fetchall()
+        con.commit()
+        con.close()
+        return user_val
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+
+
+
 # Base class for all pages in the application
 class PageBase:
     def __init__(self, master, bg_color='#ffffff'): 
@@ -88,11 +162,18 @@ class LoginPage(PageBase):
         username = self.username_entry.get()  
         password = self.password_entry.get()  
 
-        if username == "shubh" and password == "0000":  
-            self.destroy()  
-            ProfilePage(self.master, username).pack()  
+        var = userInfo(username)  
+
+        self.user = var
+        if var:
+            if password == var[-1]:
+                messagebox.showinfo("Success", "Login Successful!")
+                self.destroy()
+                ProfilePage(self.master, username).pack()
+            else:
+                messagebox.showerror("Error", "Invalid password.")
         else:
-            messagebox.showerror("Login Failed", "Invalid username or password")  
+            messagebox.showerror("Error", "Invalid username.")
 
     def sign_up(self):
         self.master._history.append(self)  
@@ -163,7 +244,9 @@ class SignUpPage(PageBase):
             messagebox.showerror("Error", "Passwords do not match.")  
             return
 
-        messagebox.showinfo("Success", "User registered successfully!")  
+        messagebox.showinfo("Success", "User registered successfully!")
+        addData(username, email, skills, phone, degree, password)
+        print("Succesfully added")  
         self.master._history.pop()  
         self.destroy()  
         LoginPage(self.master).pack()  
@@ -181,12 +264,14 @@ class ProfilePage(PageBase):
         self.create_widgets()
 
     def create_widgets(self):
+        # var2 = userInfo(self.username)
+        # print(var2)
         tk.Label(self._PageBase__frame, text=f"Welcome, {self.username}!", font=("Helvetica", 18, "bold"), bg=self.bg_color).pack(pady=10)
         
         tk.Label(self._PageBase__frame, text="User Information", font=("Helvetica", 14, "bold"), bg=self.bg_color).pack(pady=10)
-        tk.Label(self._PageBase__frame, text="Name: Shubh Agrawal", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text="Email: shubh@gmail.com", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text="Location: Bangalore, INDIA", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
+        tk.Label(self._PageBase__frame, text="Name: ", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
+        tk.Label(self._PageBase__frame, text="Email: ", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
+        tk.Label(self._PageBase__frame, text="Phone_no. : ", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
 
         button_frame = tk.Frame(self._PageBase__frame, bg=self.bg_color)
         button_frame.pack(pady=10)
@@ -206,7 +291,7 @@ class ProfilePage(PageBase):
             CustomButton(self._PageBase__frame, text="Go Back", command=self.go_back, bg='#343a40', hover_bg='#23272b').pack()
 
     def view_profile(self):
-        messagebox.showinfo("Profile", "Username: shubh\nEmail: shubh@gmail.com\nSkills: Python, JavaScript\nPhone Number: +91 9876543210\nDegree: Bachelor of Engineering")  
+        messagebox.showinfo("Profile", "Username: \nEmail: \nSkills: \nPhone Number: \nDegree: ")  
 
     def show_job_seeking_page(self):
         self.master._history.append(self)  
