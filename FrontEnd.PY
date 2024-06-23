@@ -246,7 +246,7 @@ class SignUpPage(PageBase):
 
         messagebox.showinfo("Success", "User registered successfully!")
         addData(username, email, skills, phone, degree, password)
-        print("Succesfully added")  
+        print("Succesfully added") 
         self.master._history.pop()  
         self.destroy()  
         LoginPage(self.master).pack()  
