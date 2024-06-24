@@ -264,8 +264,8 @@ class ProfilePage(PageBase):
         self.create_widgets()
 
     def create_widgets(self):
-        # var2 = userInfo(self.username)
-        # print(var2)
+        var2 = viewData()#userInfo(self.username)
+        print(var2)
         tk.Label(self._PageBase__frame, text=f"Welcome, {self.username}!", font=("Helvetica", 18, "bold"), bg=self.bg_color).pack(pady=10)
         
         tk.Label(self._PageBase__frame, text="User Information", font=("Helvetica", 14, "bold"), bg=self.bg_color).pack(pady=10)
