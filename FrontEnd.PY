@@ -262,10 +262,11 @@ class ProfilePage(PageBase):
         super().__init__(master, bg_color='#f0f0f0')  
         self.username = username  
         self.create_widgets()
+    
 
     def create_widgets(self):
-        var2 = viewData()#userInfo(self.username)
-        print(var2)
+        # var2 = userInfo(self.username)
+        # print(var2)
         tk.Label(self._PageBase__frame, text=f"Welcome, {self.username}!", font=("Helvetica", 18, "bold"), bg=self.bg_color).pack(pady=10)
         
         tk.Label(self._PageBase__frame, text="User Information", font=("Helvetica", 14, "bold"), bg=self.bg_color).pack(pady=10)
@@ -378,7 +379,7 @@ class FeedbackPage(PageBase):
 class MyApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("My Application")
+        self.title("Apna App")
         self.geometry("600x400")
         self.configure(bg='#e3f2fd')  # Light blue background color
         self._history = []  # To store page history
