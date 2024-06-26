@@ -69,11 +69,11 @@ for tb in apna:
 user_form = "INSERT INTO User (Name, Email_id, Skills, Phone_no, Degree, Password) VALUES (%s, %s, %s, %s, %s, %s)"
 
 #Declaring a array to store all the values that I want to insert into the table 
-Values = [("Yash", "yash@gmail.com", "Engineer", "2348576", "B.Tech.", "yash"),
-          ("Shivam", "shivam@gmail.com", "Backend Engineer", "52358", "B.Tech.", "shivam"),
-          ("Gautam", "gautam@gmail.com", "Software Developer", "1235789", "B.Tech.", "gautam"),
-          ("Amaan", "amaan@gmail.com", "GUI Engineer", "1547693", "B.Tech.", "amaan"),
-          ("Roshan", "roshan@gmail.com", "Backend Engineer", "2547693", "B.Tech.", "roshan")]
+Values = [("Yash", "yash@gmail.com", "Pyhton", "2348576", "B.Tech.", "yash"),
+          ("Shivam", "shivam@gmail.com", "Python", "52358", "B.Tech.", "shivam"),
+          ("Gautam", "gautam@gmail.com", "Pyhton, Java", "1235789", "B.Tech.", "gautam"),
+          ("Amaan", "amaan@gmail.com", "C++, Java", "1547693", "B.Tech.", "amaan"),
+          ("Roshan", "roshan@gmail.com", "C, C++", "2547693", "B.Tech.", "roshan")]
 
 #Executing the above to variables for insertion
 apna.executemany(user_form, Values)
