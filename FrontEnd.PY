@@ -243,13 +243,13 @@ class SignUpPage(PageBase):
         if password != confirm_password:
             messagebox.showerror("Error", "Passwords do not match.")  
             return
-
-        messagebox.showinfo("Success", "User registered successfully!")
-        addData(username, email, skills, phone, degree, password)
-        print("Succesfully added") 
-        self.master._history.pop()  
-        self.destroy()  
-        LoginPage(self.master).pack()  
+        else:
+            messagebox.showinfo("Success", "User registered successfully!")
+            addData(username, email, skills, phone, degree, password)
+            print("Succesfully added") 
+            self.master._history.pop()  
+            self.destroy()  
+            LoginPage(self.master).pack()  
 
     def cancel(self):
         self.master._history.pop()  
@@ -266,13 +266,14 @@ class ProfilePage(PageBase):
 
     def create_widgets(self):
         # var2 = userInfo(self.username)
+        # self.user1 = var2
         # print(var2)
-        tk.Label(self._PageBase__frame, text=f"Welcome, {self.username}!", font=("Helvetica", 18, "bold"), bg=self.bg_color).pack(pady=10)
+        tk.Label(self._PageBase__frame, text=f"Welcome, Shivam!", font=("Helvetica", 18, "bold"), bg=self.bg_color).pack(pady=10)
         
         tk.Label(self._PageBase__frame, text="User Information", font=("Helvetica", 14, "bold"), bg=self.bg_color).pack(pady=10)
         tk.Label(self._PageBase__frame, text="Name: ", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
         tk.Label(self._PageBase__frame, text="Email: ", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
-        tk.Label(self._PageBase__frame, text="Phone_no. : ", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
+        tk.Label(self._PageBase__frame, text="Phone_no: ", font=("Helvetica", 12), bg=self.bg_color).pack(anchor=tk.W)
 
         button_frame = tk.Frame(self._PageBase__frame, bg=self.bg_color)
         button_frame.pack(pady=10)
