@@ -1,5 +1,9 @@
 **Apna IT Application**
 
+https://github.com/shivam9142kumar/Apna_App/assets/151607127/2d0512bf-d078-4e9e-88f0-c3f528b82f31
+
+
+
 **Description :-**
 
 The Apna IT Application is a simple Python-based GUI application for user management, job seeking, and feedback. The application allows users to sign up, log in, view their profiles, apply for jobs, and provide feedback. It uses Tkinter for the GUI and mysql.connector for database interactions.
